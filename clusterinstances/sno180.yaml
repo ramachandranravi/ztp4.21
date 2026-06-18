@@ -1,0 +1,179 @@
+# example-node1-bmh-secret & assisted-deployment-pull-secret need to be created under same namespace sno180
+---
+apiVersion: siteconfig.open-cluster-management.io/v1alpha1
+kind: ClusterInstance
+metadata:
+  name: "sno180"
+  namespace: "sno180"
+spec:
+  baseDomain: "example.com"
+  pullSecretRef:
+    name: "assisted-deployment-pull-secret-sno180"
+  clusterImageSetNameRef: "img4.20.3-x86-64-appsub"
+  sshPublicKey: |
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDyhoIabaCD8Tx7W6ZVvaXGfaw3ZHkLSwgV0TS9d6l6B6PY9CQTd/7PXqWvzp8xqQX+NXDMmMZahUu95cxZ2JJBKgqQV8JTajY1LK8hIjBoxFw4CL1aEHe3Vvf26GjD29D7G0SMxvbgbbQlUYZ82cpNc/QDvnA36PVo6LCkJH0yfcdPzQyj8zXPpO28Kxf17yg6O4LJz/jmRLXIiP2UUmyfl/CCfI2vJ/TuSX5PD7gCn6Ccr8ewtyoaKQ8n8XUPAE7roYDbFJ9C6j4sMPcMUJ44O1Mx4gUwJl+lQ+iLNnZSvRaq9Iu91qbMxQo1/vtUjPW/dKNwGh20VzJZ2cKhpzFpL4brfkr3y/ywmeQVUaIuX3FwoKe4cpH3CoVID6lr8uz1fObNulTP0wZItSJbImVuwWf95qnHSJc5r2ClbMn1JATy/dP19OQxTLw1NSrd7x944Edud+yv42LV111zHYuckIlGEkuiwUbLlvodZXohj3LjQoK/XS12zLrdhY+ymPc= kni@ocp414-prov
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC6OcYlxceowq7IGSOtQozPx0svlubhhlz/rxflz/pbpizTrgzmKUwMaedaNjCFUY+5MbcNPBq4sljrqBY5o7NcY59wSrrVO7YqSNLLlExxJIsbn+EJ1M4hUUB4QhsKg8el3jcVZWGZm0fwaibf0jC7X7tgw4Ew3e8Mi+rtIpU/VXOx1UFeNHUBbUBfvWJr0nvvob1OISu4au2bKSipjx4dEWyULcKQeSig3CtbOp5ZD3lBgqXWSGbg1fB1NiUDDRS3/ul4DlVYdZOIz31/Zo4LhDrKknMt5NYzDrhN/4rR44MI5AEiMv5TIizqD6fRdeA3xPb/IUESYHcccXBVaaOujrTfoCgSzFpadCWu0Ab+SJBhXuC/L8/mL14x/v/N1saIQyfgwk9hBkYl4+8g3BYWETMxGIvQfQ1S0+WjG70PaMmrV1JMKaQ3eDYGds2b4oKVyKjhWzgRYMOkc1foctRmtY124f+AFhmCQvOq6pPSosNwYOQiIYkKlFMXRqzVPxjk5m6URrCd9ONYmNsQQlOP6quq4DroXTjcAWkgGKxi5nHJNcCZGLa7erdKGicS6H3O3kGuZ/Q0dKJBdwYBPOktwoB+syKBjpCVUuywDEGB5FUFlk+FQrtSQxiNVf7S5Uq3if7ReE7MfWoZzymZr7+3RgXYrQ5xc0k4U2jQkVX41w== ramachandranravi@fedora
+  clusterName: "sno180"
+  networkType: "OVNKubernetes"
+  # installConfigOverrides is a generic way of passing install-config
+  # parameters through the siteConfig.  The 'capabilities' field configures
+  # the composable openshift feature.  In this 'capabilities' setting, we
+  # remove all the optional set of components.
+  # Notes:
+  # - OperatorLifecycleManager is needed for 4.15 and later
+  # - NodeTuning is needed for 4.13 and later, not for 4.12 and earlier
+  # - Ingress is needed for 4.16 and later
+  installConfigOverrides: |
+    {
+      "capabilities": {
+        "baselineCapabilitySet": "None",
+        "additionalEnabledCapabilities": [
+          "NodeTuning",
+          "Console",
+          "OperatorLifecycleManager",
+          "Ingress"
+        ]
+      }
+    }
+  # Include references to extraManifest ConfigMaps.
+  extraManifestsRefs:
+    - name: sno-extra-manifest-configmap
+  extraLabels:
+    ManagedCluster:
+      # These example cluster labels correspond to the bindingRules in the PolicyGenTemplate examples
+      du-profile: "latest"
+      # These example cluster labels correspond to the bindingRules in the PolicyGenTemplate examples in ../policygentemplates:
+      # ../policygentemplates/common-ranGen.yaml will apply to all clusters with 'common: true'
+      common: "true"
+      # ../policygentemplates/group-du-sno-ranGen.yaml will apply to all clusters with 'group-du-sno: ""'
+      group-du-sno: ""
+      # ../policygentemplates/example-sno-site.yaml will apply to all clusters with 'sites: "example-sno"'
+      # Normally this should match or contain the cluster name so it only applies to a single cluster
+      sites : "example-sno"
+  clusterNetwork:
+    - cidr: 10.128.0.0/14
+      hostPrefix: 23
+  machineNetwork:
+    - cidr: 192.168.18.0/25
+  serviceNetwork:
+    - cidr: 172.30.0.0/16
+  additionalNTPSources:
+    - pool.ntp.org
+    - clock.corp.redhat.com
+  # Initiates the cluster for workload partitioning. Setting specific reserved/isolated CPUSets is done via PolicyTemplate
+  # please see Workload Partitioning Feature for a complete guide.
+  cpuPartitioningMode: AllNodes
+  templateRefs:
+    - name: ai-cluster-templates-v1
+      namespace: open-cluster-management
+  nodes:
+    - hostName: "sno180.workload.bos2.lab"
+      role: "master"
+      bmcAddress: "redfish-virtualmedia://192.168.18.180/redfish/v1/Systems/1"
+      bmcCredentialsName:
+        name: "sno180-bmc-secret"
+      bootMACAddress: "b4:96:91:c6:59:b4"
+      # Use UEFISecureBoot to enable secure boot, UEFI to disable.
+      bootMode: "UEFI"
+      rootDeviceHints:
+        deviceName: "/dev/sdb"
+      # disk partition at `/var/lib/containers` with ignitionConfigOverride. Some values must be updated. See DiskPartitionContainer.md in argocd folder for more details
+      ignitionConfigOverride: |
+        {
+          "ignition": {
+            "version": "3.2.0"
+          },
+          "storage": {
+            "disks": [
+              {
+                "device": "/dev/sdb",
+                "partitions": [
+                  {
+                    "label": "var-lib-containers",
+                    "sizeMiB": 0,
+                    "startMiB": 250000
+                  }
+                ],
+                "wipeTable": false
+              }
+            ],
+            "filesystems": [
+              {
+                "device": "/dev/disk/by-partlabel/var-lib-containers",
+                "format": "xfs",
+                "mountOptions": [
+                  "defaults",
+                  "prjquota"
+                ],
+                "path": "/var/lib/containers",
+                "wipeFilesystem": true
+              }
+            ]
+          },
+          "systemd": {
+            "units": [
+              {
+                "contents": "# Generated by Butane\n[Unit]\nRequires=systemd-fsck@dev-disk-by\\x2dpartlabel-var\\x2dlib\\x2dcontainers.service\nAfter=systemd-fsck@dev-disk-by\\x2dpartlabel-var\\x2dlib\\x2dcontainers.service\n\n[Mount]\nWhere=/var/lib/containers\nWhat=/dev/disk/by-partlabel/var-lib-containers\nType=xfs\nOptions=defaults,prjquota\n\n[Install]\nRequiredBy=local-fs.target",
+                "enabled": true,
+                "name": "var-lib-containers.mount"
+              }
+            ]
+          }
+        }
+      nodeNetwork:
+        interfaces:
+          - name: 
+            macAddress: "AA:BB:CC:DD:EE:11"
+        config:
+          interfaces:
+            - name: ens1f0 
+              type: ethernet
+              state: up
+              ipv4:
+                enabled: true
+                address:
+                - ip: 192.168.18.33
+                  prefix-length: 25
+              ipv6:
+                enabled: false
+                address:
+                # For SNO sites with static IP addresses, the node-specific,
+                # API and Ingress IPs should all be the same and configured on
+                # the interface
+                - ip: 1111:2222:3333:4444::aaaa:1
+                  prefix-length: 64
+            - name: ens1f0np0
+              type: ethernet
+              state: up
+              ipv4:
+                enabled: false
+            - name: bond1
+              type: bond
+              state: up
+              ipv4:
+                enabled: false
+              ipv6:
+                enabled: false
+              mtu: 9000
+              link-aggregation:
+                mode: 802.3ad
+                options:
+                  lacp_rate: slow
+                  miimon: 100
+                port:
+                - ens1f0np0
+          dns-resolver:
+            config:
+              search:
+              - workload.bos2.lab
+              server:
+              - 192.168.18.9
+          routes:
+            config:
+            - destination: 0.0.0.0/0
+              next-hop-interface: ens1f0 
+              next-hop-address: 192.168.18.1
+              table-id: 254
+      templateRefs:
+        - name: ai-node-templates-v1
+          namespace: open-cluster-management
