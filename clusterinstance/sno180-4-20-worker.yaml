@@ -131,11 +131,13 @@ spec:
               state: up
               ipv4:
                 enabled: true
+                dhcp: false
                 address:
                 - ip: 192.168.18.33
                   prefix-length: 25
               ipv6:
                 enabled: false
+                dhcp: false
                 address:
                 # For SNO sites with static IP addresses, the node-specific,
                 # API and Ingress IPs should all be the same and configured on
@@ -147,6 +149,7 @@ spec:
               state: up
               ipv4:
                 enabled: false
+                dhcp: false
             - name: bond1
               type: bond
               state: up
