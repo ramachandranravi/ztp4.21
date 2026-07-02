@@ -6,7 +6,7 @@ metadata:
   name: "sno180"
   namespace: "sno180"
 spec:
-  baseDomain: "example.com"
+  baseDomain: "workload.bos2.lab"
   pullSecretRef:
     name: "assisted-deployment-pull-secret-sno180"
   clusterImageSetNameRef: "img4.20.3-x86-64-appsub"
