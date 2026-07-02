@@ -37,7 +37,7 @@ spec:
     }
   # Include references to extraManifest ConfigMaps.
   extraManifestsRefs:
-    - name: sno-extra-manifest-configmap
+    - name: sno180-extra-manifest-configmap
   extraLabels:
     ManagedCluster:
       # These example cluster labels correspond to the bindingRules in the PolicyGenTemplate examples
