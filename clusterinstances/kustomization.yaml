@@ -38,8 +38,8 @@ configMapGenerator:
   - name: sno180-extra-manifest-configmap
     namespace: sno180
     files:
-      - extra-manifest/01-example-machine-config.yaml
+#      - extra-manifest/01-example-machine-config.yaml
       - extra-manifest/enable-crun-master.yaml
-      - extra-manifest/enable-crun-worker.yaml
+#      - extra-manifest/enable-crun-worker.yaml
 generatorOptions:
   disableNameSuffixHash: true 
