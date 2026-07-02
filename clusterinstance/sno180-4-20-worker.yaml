@@ -122,11 +122,11 @@ spec:
         }
       nodeNetwork:
         interfaces:
-          - name: ens1f0
-            macAddress: "AA:BB:CC:DD:EE:11"
+          - name: ens10f0
+            macAddress: "b4:96:91:c6:59:b4"
         config:
           interfaces:
-            - name: ens1f0 
+            - name: ens10f0 
               type: ethernet
               state: up
               ipv4:
@@ -174,7 +174,7 @@ spec:
           routes:
             config:
             - destination: 0.0.0.0/0
-              next-hop-interface: ens1f0 
+              next-hop-interface: ens10f0 
               next-hop-address: 192.168.18.1
               table-id: 254
       templateRefs:
