@@ -76,7 +76,7 @@ spec:
       # Use UEFISecureBoot to enable secure boot, UEFI to disable.
       bootMode: "UEFI"
       rootDeviceHints:
-        deviceName: "/dev/sdb"
+        deviceName: "/dev/sda"
       # disk partition at `/var/lib/containers` with ignitionConfigOverride. Some values must be updated. See DiskPartitionContainer.md in argocd folder for more details
       ignitionConfigOverride: |
         {
@@ -86,7 +86,7 @@ spec:
           "storage": {
             "disks": [
               {
-                "device": "/dev/sdb",
+                "device": "/dev/sda",
                 "partitions": [
                   {
                     "label": "var-lib-containers",
