@@ -76,7 +76,7 @@ spec:
       # Use UEFISecureBoot to enable secure boot, UEFI to disable.
       bootMode: "UEFI"
       rootDeviceHints:
-        wwn: "0x55cd2e4153670d4a" # OS on Drive 1 (/dev/sda)
+        wwn: "0x55cd2e4153670d4a"
       # disk partition at `/var/lib/containers` with ignitionConfigOverride. Some values must be updated. See DiskPartitionContainer.md in argocd folder for more details
       ignitionConfigOverride: |
         {
@@ -86,8 +86,7 @@ spec:
           "storage": {
             "disks": [
               {
-                "device": "/dev/disk/by-id/wwn-0x55cd2e415366e8d6", # Target Drive 2 (/dev/sdb)
-                "partitions": [
+                "device": "/dev/disk/by-id/wwn-0x55cd2e415366e8d6",
                   {
                     "label": "var",
                     "sizeMiB": 0,
