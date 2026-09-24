@@ -87,6 +87,7 @@ spec:
             "disks": [
               {
                 "device": "/dev/disk/by-id/wwn-0x55cd2e415366e8d6",
+                "partitions": [
                   {
                     "label": "var",
                     "sizeMiB": 0,
