@@ -31,7 +31,8 @@ spec:
           "NodeTuning",
           "Console",
           "OperatorLifecycleManager",
-          "Ingress"
+          "Ingress",
+          "marketplace"
         ]
       }
     }
