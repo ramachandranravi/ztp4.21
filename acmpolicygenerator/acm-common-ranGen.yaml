@@ -31,20 +31,20 @@ policies:
     ran.openshift.io/ztp-deploy-wave: "1"
   manifests:
     - path: source-crs/cluster-tuning/monitoring-configuration/ReduceMonitoringFootprint.yaml
-    - path: source-crs/disconnected-registry/DefaultCatsrc.yaml
-      patches:
-      - metadata:
-          name: redhat-operators-disconnected
-        spec:
-          displayName: disconnected-redhat-operators
-          image: registry.example.com:5000/disconnected-redhat-operators/disconnected-redhat-operator-index:v4.21
-    - path: source-crs/disconnected-registry/DisconnectedIDMS.yaml
-      patches:
-      - spec:
-          imageDigestMirrors:
-          - mirrors:
-            - registry.example.com:5000
-            source: registry.redhat.io
+#    - path: source-crs/disconnected-registry/DefaultCatsrc.yaml
+#      patches:
+#      - metadata:
+#          name: redhat-operators-disconnected
+#        spec:
+#          displayName: disconnected-redhat-operators
+#          image: registry.example.com:5000/disconnected-redhat-operators/disconnected-redhat-operator-index:v4.21
+#    - path: source-crs/disconnected-registry/DisconnectedIDMS.yaml
+#      patches:
+#      - spec:
+#          imageDigestMirrors:
+#          - mirrors:
+#            - registry.example.com:5000
+#            source: registry.redhat.io
 - name: common-latest-subscriptions-policy
   policyAnnotations:
     ran.openshift.io/ztp-deploy-wave: "2"
