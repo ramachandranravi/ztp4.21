@@ -154,6 +154,9 @@ spec:
               ipv4:
                 enabled: false
                 dhcp: false
+              ethtool:
+                feature:
+                  rx-gro: false
             - name: bond1
               type: bond
               state: up
@@ -169,6 +172,9 @@ spec:
                   miimon: 100
                 port:
                 - ens1f0np0
+              ethtool:
+                feature:
+                  rx-gro: false
           dns-resolver:
             config:
               search:
